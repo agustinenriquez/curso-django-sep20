@@ -1,0 +1,1 @@
+en windows: 1) pip install virtualenv 2) te paras en la carpeta del proyecto (curso-djando-sep20) y pones virtualenv env 3) pones cd env\Scripts\ 4) activate y listo! 
