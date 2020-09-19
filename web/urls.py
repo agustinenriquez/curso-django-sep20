@@ -1,11 +1,14 @@
 from django.contrib import admin
 from django.urls import path
-from web.views import index, htmlpersonalizado, consumir_endpoint, respuesta_json
 
+from web.views import (aeropuertos_json, consumir_endpoint, htmlpersonalizado,
+                       index, respuesta_json, contacto)
 
 urlpatterns = [
     path("", index, name="index"),
     path("holamundo", htmlpersonalizado, name="holamundo"),
     path("endpoint", consumir_endpoint, name="endpoint"),
-    path("respuesta_json", respuesta_json, name="respuesta_json")
+    path("respuesta_json", respuesta_json, name="respuesta_json"),
+    path("aeropuertos/json/", aeropuertos_json, name="aeropuertos_json"),
+    path("contacto", contacto, name="contacto")
 ]
