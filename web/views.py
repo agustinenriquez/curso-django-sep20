@@ -1,17 +1,38 @@
-import pdb
 from django.http.response import JsonResponse
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import render, reverse
+from django.http import HttpResponse, HttpResponseRedirect
 import requests
 import json
 import os
 import csv
+from .models import Curso
+from .forms import CursoForm, FormularioCursos
 # Create your views here.
 
 
 def index(request):
-    context = {}
-    return render(request, "web/index.html", context)
+    cursos = Curso.objects.all()
+    return render(request, "web/index.html", {"cursos": cursos})
+
+def detallecurso(request, *args, **kwargs):
+    """
+        Devuelve el detalle de un curso usando la pk definida en urls.py.
+    """
+    curso = Curso.objects.get(pk=kwargs['pk'])
+    formu = CursoForm()
+    return render(request, "web/detalle_curso.html", {"curso": curso, "formu": formu})
+
+def inscripciones(request, *args, **kwargs):
+    if request.method == 'POST':
+        formu = FormularioCursos(request.POST)
+        if formu.is_valid():
+            formu.save()
+            return HttpResponseRedirect(reverse("index"))
+        else:
+            return render(request, "web/inscripciones.html", {"form": formu, "error": formu.errors})
+    else:
+        formu = FormularioCursos()
+        return render(request, "web/inscripciones.html", {"form": formu})
 
 
 def htmlpersonalizado(request):
@@ -47,7 +68,6 @@ def aeropuertos_json(request):
             item['lon'] = aeropuerto[3]
             lista_aeropuertos.append(item)
     return JsonResponse(json.dumps(lista_aeropuertos), safe=False)
-
 
 def contacto(request):
     unalista = [1,2,5,32,1,7,4545]
