@@ -8,6 +8,11 @@ class Curso(models.Model):
     tags = models.CharField(max_length=50, blank=False)
     precio = models.IntegerField(default=0)
     imagen = models.ImageField(upload_to="web/static/img/", default=None, null=True, blank=True)
+    image_path = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return self.nombre
+
+    def save(self, *args, **kwargs):
+        self.image_path = self.imagen.url.replace("/web", "")
+        return super().save(*args, **kwargs)

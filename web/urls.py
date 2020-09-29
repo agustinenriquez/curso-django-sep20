@@ -12,5 +12,5 @@ urlpatterns = [
     path("aeropuertos/json/", aeropuertos_json, name="aeropuertos_json"),
     path("contacto", contacto, name="contacto"),
     path("curso/<int:pk>/", detallecurso, name="detalle_curso"),
-    path("curso/<int:pk>/incripcion/", inscripciones, name="inscripciones")
+    path("curso/<int:pk>/inscripcion/", inscripciones, name="inscripciones")
 ]
