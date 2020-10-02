@@ -1,4 +1,4 @@
-from .models import Curso
+from .models import Curso, Pelicula
 from django import forms
 
 
@@ -19,3 +19,13 @@ class FormularioCursos(forms.Form):
 
     def __str__(self):
         return self.nombre
+
+
+class PeliculaForm(forms.ModelForm):
+    class Meta:
+        model = Pelicula
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(PeliculaForm, self).__init__(*args, **kwargs)
+        self.fields['mayores_de'].initial = None

@@ -16,3 +16,10 @@ class Curso(models.Model):
     def save(self, *args, **kwargs):
         self.image_path = self.imagen.url.replace("/web", "")
         return super().save(*args, **kwargs)
+
+
+class Pelicula(models.Model):
+    nombre = models.CharField(max_length=50, blank=False)
+    fecha_estreno = models.DateField(auto_now=False, auto_now_add=False)
+    mayores_de = models.IntegerField(default=0)
+    preventa_online = models.BooleanField(default=False)

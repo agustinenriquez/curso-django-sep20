@@ -6,7 +6,7 @@ import json
 import os
 import csv
 from .models import Curso
-from .forms import CursoForm, FormularioCursos
+from .forms import CursoForm, FormularioCursos, PeliculaForm
 # Create your views here.
 
 
@@ -73,3 +73,13 @@ def contacto(request):
     unalista = [1,2,5,32,1,7,4545]
     context = {"Nombre": "Agustin", "Profesion": "Ingeniero en sistemas", "unalista": unalista}
     return render(request, "web/contacto.html", context)
+
+def nueva_pelicula(request):
+    if request.method == 'POST':
+        form = PeliculaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse("agregar_peliculas"))
+    else:
+        form = PeliculaForm()
+    return render(request, "web/pelicula.html", {'form': form})
