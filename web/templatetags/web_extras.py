@@ -15,8 +15,12 @@ def add_click_to_course_image(context):
     url = context['request'].path + "inscripcion"
     let_img = "let imagen_curso = document.querySelector(\'img[id=imagen-curso]\');"
     href = "imagen_curso.onclick = function(){ window.location.href = '" + url + "'}"
+<<<<<<< HEAD
     return (
         f"{let_img}"
         f"{href}"
         )
 >>>>>>> dinamically setting href onclick img url
+=======
+    return (f"{let_img}{href}")
+>>>>>>> templatetag edit
