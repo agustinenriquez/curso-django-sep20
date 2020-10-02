@@ -22,6 +22,8 @@ class FormularioCursos(forms.Form):
 
 
 class PeliculaForm(forms.ModelForm):
+    fecha_estreno = forms.DateField(input_formats=['%d-%m-%Y'])
+
     class Meta:
         model = Pelicula
         fields = '__all__'
