@@ -1,0 +1,18 @@
+{% extends 'web/base.html' %}
+{% load static %}
+
+{% block content %}
+      <div class="row">
+        <div class="col-md-12">
+        <h2>Agregar pelicula</h2>
+        {% if errors %}
+            <h2>errors</h2>
+        {% endif %}
+        <form action="#" method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Aceptar">
+        </form>
+        </div>
+      </div>
+{% endblock %}
