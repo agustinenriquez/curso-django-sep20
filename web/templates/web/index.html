@@ -15,7 +15,9 @@
               <p class="card-text">{{curso.nombre}}</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'detalle_curso' curso.pk %}">Detalle</a></button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary">
+                  <a href="{% url 'detalle_curso' curso.pk %}">Detalle</a>
+                  </button>
                 </div>
                 <small class="text-muted">PRECIO: ${{curso.precio}}</small>
               </div>

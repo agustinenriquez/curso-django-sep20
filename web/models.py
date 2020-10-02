@@ -11,3 +11,10 @@ class Curso(models.Model):
 
     def __str__(self):
         return self.nombre
+
+
+class Pelicula(models.Model):
+    nombre = models.CharField(max_length=50, blank=False)
+    fecha = models.DateField(auto_now=False, auto_now_add=False)
+    mayores_de = models.IntegerField(default=0)
+    preventa_online = models.BooleanField(default=False)
