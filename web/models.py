@@ -37,3 +37,12 @@ class Contacto(models.Model):
     
     def __str__(self):
         return self.author
+
+
+class AdjuntosCurso(models.Model):
+    curso = models.ForeignKey("Curso", on_delete=models.CASCADE)
+    archivo = models.FileField(upload_to='adjuntos/')
+    nombre = models.CharField(max_length=50, default=None)
+
+    def __str__(self) -> str:
+        return self.nombre

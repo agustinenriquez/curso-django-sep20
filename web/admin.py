@@ -33,5 +33,3 @@ class ImagenCursoAdmin(admin.ModelAdmin):
     class Meta:
         model = ImagenCurso
         fields = '__all__'
-
-

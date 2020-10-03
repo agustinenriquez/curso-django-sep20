@@ -24,10 +24,11 @@ def detallecurso(request, *args, **kwargs):
     """
     curso = Curso.objects.get(pk=kwargs['pk'])
     formu = CursoForm()
+    adjuntos = AdjuntosCurso.objects.filter(curso__id=curso.id)
     return render(
         request,
         "web/detalle_curso.html",
-        {"curso": curso, "formu": formu})
+        {"curso": curso, "formu": formu, "adjuntos": adjuntos})
 
 
 def inscripciones(request, *args, **kwargs):
