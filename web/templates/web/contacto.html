@@ -1,19 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contacto</title>
-</head>
-<body>
-    <h1>Contacto</h1>
+{% extends 'web/base.html' %}
+{% load static %}
 
-    {% if Nombre %}
-        <h2>Nombre: {{Nombre}}</h2>
-    {% endif %}
-
-    {% for item in unalista %}
-        <p>{{item}}</p>
-    {% endfor %}
-</body>
-</html>
+{% block content %}
+      <div class="row">
+        <div class="col-md-12">
+        <h2>Contacto</h2>
+        {% if errors %}
+            <h2>errors</h2>
+            <p>{{ errors }} </p>
+        {% endif %}
+        <form action="#" method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Aceptar">
+        </form>
+        </div>
+      </div>
+{% endblock %}

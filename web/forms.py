@@ -1,4 +1,4 @@
-from .models import Curso, Pelicula
+from .models import Curso, Pelicula, Contacto
 from django import forms
 
 
@@ -24,4 +24,10 @@ class FormularioCursos(forms.Form):
 class PeliculaForm(forms.ModelForm):
     class Meta:
         model = Pelicula
+        fields = '__all__'
+
+
+class ContactoForm(forms.ModelForm):
+    class Meta:
+        model = Contacto
         fields = '__all__'

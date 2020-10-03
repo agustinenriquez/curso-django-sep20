@@ -1,12 +1,11 @@
 from django.contrib import admin
-from .models import Curso, Pelicula
+from .models import Curso, Pelicula, Contacto
 # Register your models here.
 
 
 @admin.register(Curso)
 class CursoAdmin(admin.ModelAdmin):
     list_display = ("nombre", "precio")
-
 
 
 @admin.register(Pelicula)
@@ -16,3 +15,8 @@ class PeliculaAdmin(admin.ModelAdmin):
     def fecha_de_estreno(self, obj):
         return obj.fecha.strftime("%d-%m-%Y")
     fecha_de_estreno.short_description = "Fecha de estreno"
+
+
+@admin.register(Contacto)
+class ContactoAdmin(admin.ModelAdmin):
+    list_display = ("author", "email")
