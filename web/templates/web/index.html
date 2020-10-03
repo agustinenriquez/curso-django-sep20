@@ -1,6 +1,6 @@
 {% extends 'web/base.html' %}
 {% load static %}
-
+{% load web_extras %}
 {% include 'web/navbar.html' %}
 
 {% block content %}
@@ -8,7 +8,7 @@
         {% for curso in cursos %}
         <div class="col-md-4">
           <div class="card mb-4 shadow-sm">
-          <img id="imagen-curso" src="{{curso.image_path}}" alt="{{curso.nombre}}">
+          <img id="imagen-curso" src="{{curso.imagen_principal.url}}" alt="{{curso.nombre}}">
             <div class="card-body">
               <p class="card-text">{{curso.nombre}}</p>
               <div class="d-flex justify-content-between align-items-center">
@@ -23,5 +23,11 @@
           </div>
         </div>
         {% endfor %}
+
+        <script>
+          {% autoescape off %}
+            {% add_click_to_course_image %}
+          {% endautoescape %}
+      </script>
       </div>
 {% endblock %}
