@@ -1,5 +1,6 @@
 from .models import Curso, Pelicula, Contacto
 from django import forms
+from django.contrib.auth.models import User
 
 
 class CursoForm(forms.ModelForm):
@@ -31,3 +32,15 @@ class ContactoForm(forms.ModelForm):
     class Meta:
         model = Contacto
         fields = '__all__'
+
+
+class LoginForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput)
+    class Meta:
+        model = User
+        fields = ("username", "password")
+
+
+class UserForm(forms.Form):
+    usuario = forms.CharField(label="Nombre", max_length=50, required=True)
+    password = forms.CharField(widget=forms.PasswordInput)

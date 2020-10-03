@@ -1,0 +1,18 @@
+{% extends 'web/base.html' %}
+{% load static %}
+
+{% block content %}
+      <div class="row">
+        <div class="col-md-12">
+        <h2>Login</h2>
+        {% if errors %}
+            <p class="text-danger">{{errors}}</p>
+        {% endif %}
+        <form action="#" method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Login">
+        </form>
+        </div>
+      </div>
+{% endblock %}

@@ -1,9 +1,10 @@
 from django.shortcuts import render, reverse
 from django.http import HttpResponseRedirect
 from .models import Curso
-from .forms import CursoForm, FormularioCursos, PeliculaForm, ContactoForm
+from .forms import CursoForm, FormularioCursos, PeliculaForm, ContactoForm, LoginForm
 from django.core.mail import send_mail
-# Create your views here.
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 
 
 def index(request):
@@ -27,6 +28,9 @@ def detallecurso(request, *args, **kwargs):
 
 
 def inscripciones(request, *args, **kwargs):
+    """
+        Renderiza el formulario de inscripción a un curso.
+    """
     if request.method == 'POST':
         formu = FormularioCursos(request.POST)
         if formu.is_valid():
@@ -81,3 +85,22 @@ def agregar_peliculas(request):
     else:
         form = PeliculaForm()
         return render(request, "web/agregar_pelicula.html", {"form": form})
+
+
+def logueo(request):
+    """
+        Renderiza la pagina para identificarse a la web.
+    """
+    error = None
+    if request.method == 'POST':
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            return HttpResponseRedirect(reverse("index"))
+        else:
+            form = LoginForm()
+            error = "El usuario no existe"
+    else:
+        form = LoginForm()
+    return render(request, "web/login.html", {"form": form, "errors": error})
