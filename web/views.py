@@ -113,3 +113,12 @@ def deslogueo(request):
     """
     logout(request)
     return HttpResponseRedirect(reverse("index"))
+
+
+def busqueda(request):
+    """
+        Devuelve resultados de busqueda hechos a traves del input del base.html.
+    """
+    cursos = Curso.objects.filter(nombre__contains=request.GET['q'])
+    return render(request, "web/resultado_busqueda.html", {"cursos": cursos})
+
