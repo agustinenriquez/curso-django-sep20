@@ -15,6 +15,7 @@ class Curso(models.Model):
 
     def save(self, *args, **kwargs):
         self.image_path = self.imagen.url.replace("/web", "")
+<<<<<<< HEAD
         return super().save(*args, **kwargs)
 
 
@@ -32,3 +33,6 @@ class Contacto(models.Model):
     
     def __str__(self):
         return self.author
+=======
+        return super().save(*args, **kwargs)
+>>>>>>> 1ba0c17fbcaf9cefff3f08e95200326dba0194c3
