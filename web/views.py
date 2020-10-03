@@ -6,6 +6,7 @@ from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib import messages
 # Create your views here.
 
 
@@ -62,9 +63,11 @@ def contacto(request):
             form.save()
             return HttpResponseRedirect(reverse("contacto"))
         else:
+            messages.add_message(request, messages.INFO, 'El formulario no es valido')
             context = {'error': "El formulario no es valido"}
             return render(request, "web/contacto.html", context)
     else:
+        messages.add_message(request, messages.INFO, 'GET REQUEST.')
         form = ContactoForm()
         return render(request, "web/contacto.html", {"form": form})
 
