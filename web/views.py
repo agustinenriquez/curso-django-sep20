@@ -4,7 +4,7 @@ from .models import Curso
 from .forms import CursoForm, FormularioCursos, PeliculaForm, ContactoForm, LoginForm
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login, logout
 
 
 def index(request):
@@ -97,6 +97,7 @@ def logueo(request):
         password = request.POST["password"]
         user = authenticate(username=username, password=password)
         if user is not None:
+            login(request, user)
             return HttpResponseRedirect(reverse("index"))
         else:
             form = LoginForm()
@@ -104,3 +105,11 @@ def logueo(request):
     else:
         form = LoginForm()
     return render(request, "web/login.html", {"form": form, "errors": error})
+
+
+def deslogueo(request):
+    """
+        Realiza el deslogueo de la cuenta y redirige a la home.
+    """
+    logout(request)
+    return HttpResponseRedirect(reverse("index"))

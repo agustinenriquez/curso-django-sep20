@@ -86,8 +86,12 @@
           </li>
           {% if user.is_authenticated %}
           <li class="nav-item">
+            <a class="nav-link" href="{% url 'deslogueo' %}">Logout</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link disabled" href="#">Hola, {{user.username}}!</a>
           </li>
+          
           {% endif %}
         </ul>
         <form class="form-inline my-2 my-lg-0">
