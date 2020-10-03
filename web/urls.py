@@ -20,5 +20,4 @@ urlpatterns = [
     # user/remove
     # user/change
     # profile/userid
-
 ]
