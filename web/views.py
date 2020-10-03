@@ -1,7 +1,6 @@
 from django.shortcuts import render, reverse
 from django.http import HttpResponseRedirect
 from .models import Curso
-<<<<<<< HEAD
 from .forms import CursoForm, FormularioCursos, LoginForm, PeliculaForm, ContactoForm, UsuarioForm
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login, logout
@@ -9,12 +8,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 # Create your views here.
-=======
-from .forms import CursoForm, FormularioCursos, PeliculaForm, ContactoForm, LoginForm
-from django.core.mail import send_mail
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
->>>>>>> login form & is auth in base
 
 
 def index(request):
@@ -99,7 +92,6 @@ def agregar_peliculas(request):
         return render(request, "web/agregar_pelicula.html", {"form": form})
 
 
-<<<<<<< HEAD
 def busqueda(request):
     """
         Devuelve resultados de busqueda hecho a traves del formulario.
@@ -132,34 +124,23 @@ def busqueda(request):
     return render(request, "web/resultados_busqueda.html", {'cursos': curso})
 
 
-=======
->>>>>>> login form & is auth in base
 def logueo(request):
     """
         Renderiza la pagina para identificarse a la web.
     """
     error = None
-<<<<<<< HEAD
     if request.method == "POST":
-=======
-    if request.method == 'POST':
->>>>>>> login form & is auth in base
         username = request.POST["username"]
         password = request.POST["password"]
         user = authenticate(username=username, password=password)
         if user is not None:
-<<<<<<< HEAD
             login(request, user)
-            return HttpResponseRedirect(reverse(index))
-=======
             return HttpResponseRedirect(reverse("index"))
->>>>>>> login form & is auth in base
         else:
             form = LoginForm()
             error = "El usuario no existe"
     else:
         form = LoginForm()
-<<<<<<< HEAD
     return render(request, "web/login.html", {"form": form, "error": error})
 
 
@@ -215,6 +196,3 @@ def crear_usuario(request):
     else:
         context['form'] = UsuarioForm()
         return render(request, template, context)
-=======
-    return render(request, "web/login.html", {"form": form, "errors": error})
->>>>>>> login form & is auth in base
