@@ -3,6 +3,7 @@ from .models import Curso, Pelicula, Contacto
 from django import forms
 from django.contrib.auth.models import User
 
+
 class CursoForm(forms.ModelForm):
     class Meta:
         model = Curso
