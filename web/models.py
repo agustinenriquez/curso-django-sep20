@@ -19,6 +19,8 @@ class Pelicula(models.Model):
     mayores_de = models.IntegerField(default=0)
     preventa_online = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.nombre
 
 class Contacto(models.Model):
     author = models.CharField(max_length=50)
