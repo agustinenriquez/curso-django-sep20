@@ -1,4 +1,7 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 
 # Create your models here.
 
@@ -30,6 +33,9 @@ class Contacto(models.Model):
     def __str__(self):
         return self.author
 
+def send_contact(self, author, mensaje, email):
+        self.send(sender=self.__class__, author=author, mensaje=mensaje, email=email)
+
 
 class AdjuntosCurso(models.Model):
     curso = models.ForeignKey("Curso", on_delete=models.CASCADE)
@@ -38,3 +44,12 @@ class AdjuntosCurso(models.Model):
 
     def __str__(self) -> str:
         return self.nombre
+
+
+
+@receiver(post_save, sender=Contacto)
+def create_contact(sender, instance, created, **kwargs):
+    print("New contact and email was sent!")
+
+
+post_save.connect(create_contact, sender=Contacto)
