@@ -10,7 +10,8 @@ class Curso(models.Model):
     horario = models.CharField(max_length=50, blank=False)
     tags = models.CharField(max_length=50, blank=False)
     precio = models.IntegerField(default=0)
-    imagen_principal = models.ImageField(upload_to="adjuntos/", default=None, null=True, blank=True)
+    imagen_principal = models.ImageField(
+        upload_to="adjuntos/", default=None, null=True, blank=True)
 
     def __str__(self):
         return self.nombre
@@ -25,16 +26,14 @@ class Pelicula(models.Model):
     def __str__(self):
         return self.nombre
 
+
 class Contacto(models.Model):
     author = models.CharField(max_length=50)
     mensaje = models.TextField(max_length=350)
     email = models.EmailField(max_length=254)
-    
+
     def __str__(self):
         return self.author
-
-def send_contact(self, author, mensaje, email):
-        self.send(sender=self.__class__, author=author, mensaje=mensaje, email=email)
 
 
 class AdjuntosCurso(models.Model):
@@ -44,7 +43,6 @@ class AdjuntosCurso(models.Model):
 
     def __str__(self) -> str:
         return self.nombre
-
 
 
 @receiver(post_save, sender=Contacto)

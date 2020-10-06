@@ -54,13 +54,13 @@ def contacto(request):
     if request.method == "POST":
         form = ContactoForm(request.POST)
         if form.is_valid():
-            send_mail(
-                "EducIT: Recibimos tu mensaje",
-                "Dentro de poco nos pondremos en contacto.",
-                "contacto@educit.com.ar",
-                [form.cleaned_data['email']],
-                fail_silently=False,
-            )
+            # send_mail(
+            #     "EducIT: Recibimos tu mensaje",
+            #     "Dentro de poco nos pondremos en contacto.",
+            #     "contacto@educit.com.ar",
+            #     [form.cleaned_data['email']],
+            #     fail_silently=False,
+            # )
             form.save()
             return HttpResponseRedirect(reverse("contacto"))
         else:
