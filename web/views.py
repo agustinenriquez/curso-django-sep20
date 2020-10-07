@@ -51,6 +51,7 @@ def contacto(request):
     """
         Renderiza la pagina de contacto con su formulario.
     """
+    context = {}
     if request.method == "POST":
         form = ContactoForm(request.POST)
         if form.is_valid():
@@ -64,7 +65,9 @@ def contacto(request):
             form.save()
             return HttpResponseRedirect(reverse("contacto"))
         else:
-            context = {'error': "El formulario no es valido"}
+            context["form"] = ContactoForm()
+            context['error'] = "El formulario no es valido"
+            context["author_field_error"] = form.errors['author'][0]
             return render(request, "web/contacto.html", context)
     else:
         form = ContactoForm()
