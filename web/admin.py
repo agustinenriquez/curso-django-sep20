@@ -5,7 +5,8 @@ from .models import Curso, Pelicula, Contacto, AdjuntosCurso
 
 @admin.register(Pelicula)
 class PeliculaAdmin(admin.ModelAdmin):
-    list_display = ("nombre", "mayores_de", "preventa_online", "fecha_de_estreno")
+    list_display = (
+        "nombre", "mayores_de", "preventa_online", "fecha_de_estreno")
 
     def fecha_de_estreno(self, obj):
         return obj.fecha.strftime("%d-%m-%Y")

@@ -1,10 +1,11 @@
-from django.shortcuts import render, reverse
-from django.http import HttpResponseRedirect
-from .models import Curso, AdjuntosCurso
-from .forms import CursoForm, FormularioCursos, PeliculaForm, ContactoForm, LoginForm
-from django.core.mail import send_mail
-from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.core.mail import send_mail
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, reverse
+
+from .forms import (ContactoForm, CursoForm, FormularioCursos, LoginForm,
+                    PeliculaForm)
+from .models import AdjuntosCurso, Curso
 
 
 def index(request):
@@ -121,8 +122,7 @@ def deslogueo(request):
 
 def busqueda(request):
     """
-        Devuelve resultados de busqueda hechos a traves del input del base.html.
+        Devuelve resultados de busqueda hechos a traves del input del base.html
     """
     cursos = Curso.objects.filter(nombre__contains=request.GET['q'])
     return render(request, "web/resultado_busqueda.html", {"cursos": cursos})
-
