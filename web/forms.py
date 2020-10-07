@@ -17,7 +17,8 @@ class FormularioCursos(forms.Form):
     email = forms.EmailField(required=False)
     es_empresa = forms.BooleanField(label="Es empresa?", required=False)
     turno = forms.ChoiceField(choices=TURNOS, required=False)
-    fecha_inicio = forms.DateField(label="Fecha de inicio", input_formats=["%d/%m/%y"])
+    fecha_inicio = forms.DateField(
+        label="Fecha de inicio", input_formats=["%d/%m/%y"])
 
     def __str__(self):
         return self.nombre
@@ -42,6 +43,7 @@ class ContactoForm(forms.ModelForm):
 
 class LoginForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
+
     class Meta:
         model = User
         fields = ("username", "password")
