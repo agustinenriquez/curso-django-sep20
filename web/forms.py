@@ -34,6 +34,11 @@ class ContactoForm(forms.ModelForm):
         model = Contacto
         fields = '__all__'
 
+    def clean_author(self):
+        author = self.cleaned_data.get("author")
+        if author.isdigit() or author.isdecimal():
+            raise ValidationError("Autor no puede contener numeros.")
+
 
 class LoginForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
