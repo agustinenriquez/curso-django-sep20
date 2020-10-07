@@ -1,4 +1,5 @@
-from django.test import TestCase
+import django; django.setup()
+from unittest import TestCase
 from web.models import Contacto
 # Create your tests here.
 

@@ -10,3 +10,5 @@ flake:
 	flake8 .
 createuser:
 	python manage.py createsuperuser --username admin
+testweb:
+	python manage.py test web
