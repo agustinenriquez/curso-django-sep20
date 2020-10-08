@@ -1,5 +1,5 @@
-import django
-from django.core.exceptions import ValidationError; django.setup()
+import django; django.setup()
+from django.core.exceptions import ValidationError
 from unittest import TestCase
 from web.models import Contacto
 from model_bakery import baker
@@ -41,7 +41,6 @@ class ContactoModelTest(TestCase):
         self.assertGreater(self.contacto.email[0].count("@"), 1)
         with self.assertRaises(ValidationError):
             self.contacto.validate_email(self.contacto.email[0])
-            
 
     def test_contacto_author_isdecimal_isdigit(self):
         contacto = Contacto(
