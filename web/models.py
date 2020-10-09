@@ -1,7 +1,8 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
+from django.core.validators import validate_email
 
 # Create your models here.
 
@@ -30,10 +31,15 @@ class Pelicula(models.Model):
 class Contacto(models.Model):
     author = models.CharField(max_length=50)
     mensaje = models.TextField(max_length=350)
-    email = models.EmailField(max_length=254)
+    email = models.EmailField(max_length=254, validators=[validate_email])
 
     def __str__(self):
         return self.author
+
+    @classmethod
+    def validate_email(cls, email):
+        if email.count("@") > 1:
+            raise ValidationError("Email cant have two ats.")
 
 
 class AdjuntosCurso(models.Model):
