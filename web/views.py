@@ -1,8 +1,10 @@
 from django.shortcuts import render, reverse
 from django.http import HttpResponseRedirect
 from .models import Curso
-from .forms import CursoForm, FormularioCursos, PeliculaForm, ContactoForm
+from .forms import CursoForm, FormularioCursos, LoginForm, PeliculaForm, ContactoForm
 from django.core.mail import send_mail
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 
@@ -81,3 +83,82 @@ def agregar_peliculas(request):
     else:
         form = PeliculaForm()
         return render(request, "web/agregar_pelicula.html", {"form": form})
+
+
+def busqueda(request):
+    """
+        Devuelve resultados de busqueda hecho a traves del formulario.
+        Curso.objects.all() -> devuelve todos los resultados
+        Curso.objects.first() -> primero
+        Curso.objects.last() -> ultimo
+        Curso.objects.distinct() -> elimina duplicados
+        Curso.objects.all().delete() -> borra todo
+        Curso.objects.first().delete() -> borra uno
+        Curso.objects.all[0].delete()
+        Curso.objects.get(pk=1) -> devuelve obj con pk 1
+        Contacto.objects.filter(mensaje__contains="texto")
+        Curso.objects.get(pk=1).values("nombre") -> devuelve el campo seleccionado
+        Perfil.objects.filter(user__email__contains="@gmail.com")
+
+        *** Subfiltros ***
+
+        __contains __icontains __in __field __lte __gte __lt __gt
+        __exact __endswith __isnull 
+
+        ***            ***
+
+        Perfil.objects.all().exclude()
+
+        Q queries | F Expressions
+        prefetch_related | select_related
+
+    """
+    curso = Curso.objects.filter(nombre__icontains=request.GET['q'])
+    return render(request, "web/resultados_busqueda.html", {'cursos': curso})
+
+
+def logueo(request):
+    """
+        Renderiza la pagina para identificarse a la web.
+    """
+    error = None
+    if request.method == "POST":
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect(reverse(index))
+        else:
+            form = LoginForm()
+            error = "El usuario no existe"
+    else:
+        form = LoginForm()
+    return render(request, "web/login.html", {"form": form, "error": error})
+
+
+def deslogueo(request):
+    """
+        Desloguea al usuario y redirecciona a la home.
+    """
+    logout(request)
+    return HttpResponseRedirect(reverse("index"))
+
+
+@login_required(login_url="/login/")
+def crear_curso(request):
+    """
+        Renderiza el formulario de creacion de cursos.
+    """
+    error = None
+    if request.method == 'POST':
+        form = CursoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse("crear-curso"))
+        else:
+            context = {'error': "El formulario no es valido"}
+            return render(request, "web/agregar_pelicula.html", context)
+    else:
+        form = CursoForm()
+    return render(request, "web/crear_curso.html", {"form": form, "error": error})

@@ -1,0 +1,30 @@
+{% extends 'web/base.html' %}
+
+{% load static %}
+
+{% include 'web/navbar.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <h3><small class="text-muted">Resultados:</small><br></h3>
+        </div>
+        {% for curso in cursos %}
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+              <img id="imagen-curso" src="{{curso.image_path}}" alt="{{curso.nombre}}">
+              <div class="card-body">
+                <p class="card-text">{{curso.nombre}}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-outline-secondary">
+                      <a href="{% url 'detalle_curso' curso.pk %}">Detalle</a></button>
+                    </div>
+                    <small class="text-muted">PRECIO: ${{curso.precio}}</small>
+                </div>
+              </div>
+          </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

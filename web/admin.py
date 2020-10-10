@@ -1,11 +1,17 @@
 from django.contrib import admin
-from .models import Curso, Pelicula, Contacto
+from .models import Curso, Pelicula, Contacto, ImagenCurso
 # Register your models here.
+
+
+class ImagenCursoAdmin(admin.StackedInline):
+    model = ImagenCurso
 
 
 @admin.register(Curso)
 class CursoAdmin(admin.ModelAdmin):
     list_display = ("nombre", "precio")
+    inlines = [ImagenCursoAdmin]
+    exclude = ("imagen", )
 
 
 @admin.register(Pelicula)
@@ -20,3 +26,12 @@ class PeliculaAdmin(admin.ModelAdmin):
 @admin.register(Contacto)
 class ContactoAdmin(admin.ModelAdmin):
     list_display = ("author", "email")
+
+
+@admin.register(ImagenCurso)
+class ImagenCursoAdmin(admin.ModelAdmin):
+    class Meta:
+        model = ImagenCurso
+        fields = '__all__'
+
+
