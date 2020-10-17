@@ -1,10 +1,11 @@
 from django.shortcuts import render, reverse
 from django.http import HttpResponseRedirect
 from .models import Curso
-from .forms import CursoForm, FormularioCursos, LoginForm, PeliculaForm, ContactoForm
+from .forms import CursoForm, FormularioCursos, LoginForm, PeliculaForm, ContactoForm, UsuarioForm
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 # Create your views here.
 
 
@@ -51,13 +52,13 @@ def contacto(request):
     if request.method == "POST":
         form = ContactoForm(request.POST)
         if form.is_valid():
-            send_mail(
-                "EducIT: Recibimos tu mensaje",
-                "Dentro de poco nos pondremos en contacto.",
-                "contacto@educit.com.ar",
-                [form.cleaned_data['email']],
-                fail_silently=False,
-            )
+            # send_mail(
+            #     "EducIT: Recibimos tu mensaje",
+            #     "Dentro de poco nos pondremos en contacto.",
+            #     "contacto@educit.com.ar",
+            #     [form.cleaned_data['email']],
+            #     fail_silently=False,
+            # )
             form.save()
             return HttpResponseRedirect(reverse("contacto"))
         else:
@@ -162,3 +163,30 @@ def crear_curso(request):
     else:
         form = CursoForm()
     return render(request, "web/crear_curso.html", {"form": form, "error": error})
+
+
+def crear_usuario(request):
+    """
+        Renderiza formulario para crear un usuario.
+    """
+    template = "web/crear_usuario.html"
+    context = {}
+    if request.method == 'POST':
+        form = UsuarioForm(request.POST)
+        if form.is_valid():
+            obj, created = User.objects.get_or_create(
+                username=request.POST['username'],
+                password=request.POST['password'],
+                email=request.POST['email'])
+            if created:
+                return HttpResponseRedirect(reverse("index"))
+            else:
+                context['form'] = UsuarioForm()
+                context["ya_creado"] = True
+                return render(request, template, context)
+        else:
+            context['error'] = 'el usuario ya existe.'
+            return render(request, template, context)
+    else:
+        context['form'] = UsuarioForm()
+        return render(request, template, context)

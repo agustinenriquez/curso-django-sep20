@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.urls import path
 
 from web.views import (index, contacto, detallecurso, inscripciones,
-                       agregar_peliculas, busqueda, logueo, deslogueo, crear_curso)
+                       agregar_peliculas, busqueda, logueo, deslogueo, crear_curso,
+                       crear_usuario)
 
 urlpatterns = [
     path("", index, name="index"),
@@ -14,4 +15,10 @@ urlpatterns = [
     path("busqueda", busqueda, name="busqueda"),
     path("login/", logueo, name="login"),
     path("logout/", deslogueo, name="deslogueo"),
+    path("usuario/agregar", crear_usuario, name="crear_usuario"),
+    # user/add
+    # user/remove
+    # user/change
+    # profile/userid
+
 ]

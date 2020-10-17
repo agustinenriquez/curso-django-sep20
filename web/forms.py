@@ -1,3 +1,4 @@
+from django.db.models.fields import CharField
 from .models import Curso, Pelicula, Contacto
 from django import forms
 from django.contrib.auth.models import User
@@ -38,3 +39,9 @@ class LoginForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ("username", "password")
+
+
+class UsuarioForm(forms.Form):
+    username = forms.CharField(max_length=25, required=True)
+    password = forms.CharField(widget=forms.PasswordInput)
+    email = forms.EmailField(required=True)
