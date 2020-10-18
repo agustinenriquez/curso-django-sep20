@@ -1,6 +1,6 @@
 from django.shortcuts import render, reverse
 from django.http import HttpResponseRedirect
-from .models import Curso
+from .models import Curso, ImagenCurso
 from .forms import CursoForm, FormularioCursos, LoginForm, PeliculaForm, ContactoForm, UsuarioForm
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login, logout
@@ -26,7 +26,7 @@ def detallecurso(request, *args, **kwargs):
     """
     curso = Curso.objects.get(pk=kwargs['pk'])
     formu = CursoForm()
-    adjuntos = AdjuntosCurso.objects.filter(curso__id=curso.id)
+    adjuntos = ImagenCurso.objects.filter(curso__id=curso.id)
     return render(
         request,
         "web/detalle_curso.html",

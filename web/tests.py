@@ -1,5 +1,7 @@
+import os
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cursodjango.settings")
 import django; django.setup()
-from unittest import TestCase
+from django.test import TestCase
 from web.models import Contacto
 
 
@@ -12,22 +14,19 @@ class HomeTest(TestCase):
         request = self.client.get(self.url)
         self.assertEqual(request.status_code, 200)
 
-    def test_contacto(self):
-        instance = Contacto()
-        self.assertEqual(type(instance.author), str)
-
 
 class ContactoModelTest(TestCase):
 
+    def setup(self):
+        self.instance = Contacto()
+
     def test_instanciate_contacto_model_ok(self):
-        contacto = Contacto()
-        self.assertTrue(isinstance(contacto, Contacto))
+        self.assertTrue(isinstance(self.instance, Contacto))
 
     def test_instanciate_contacto_with_author(self):
-        contacto = Contacto()
-        contacto.author = "TestAuthor"
-        self.assertTrue(isinstance(contacto, Contacto))
-        self.assertTrue(contacto.author, "TestAuthor")
+        self.instance
+        self.instance.author = "TestAuthor"
+        self.assertTrue(self.instance.author, "TestAuthor")
 
     def test_instanciate_contacto_with_fields(self):
         author = "testAuthor"
@@ -37,7 +36,6 @@ class ContactoModelTest(TestCase):
             author=author,
             email=email,
             mensaje=mensaje)
-        self.assertTrue(isinstance(contacto, Contacto))
         self.assertTrue(contacto.author, mensaje)
         self.assertTrue(contacto.email, email)
         self.assertTrue(contacto.mensaje, mensaje)
