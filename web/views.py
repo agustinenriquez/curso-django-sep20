@@ -7,6 +7,8 @@ from .forms import (ContactoForm, CursoForm, FormularioCursos, LoginForm,
                     PeliculaForm)
 from .models import AdjuntosCurso, Curso
 
+from django.contrib import messages
+
 
 def index(request):
     """
@@ -66,11 +68,13 @@ def contacto(request):
             form.save()
             return HttpResponseRedirect(reverse("contacto"))
         else:
+            messages.add_message(request, messages.INFO, 'ERROR MALON')
             context["form"] = ContactoForm()
             context['error'] = "El formulario no es valido"
             context["author_field_error"] = form.errors['author'][0]
             return render(request, "web/contacto.html", context)
     else:
+        messages.add_message(request, messages.INFO, 'GET REQUEST VIEJA')
         form = ContactoForm()
         return render(request, "web/contacto.html", {"form": form})
 
