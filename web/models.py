@@ -1,11 +1,4 @@
 from django.db import models
-<<<<<<< HEAD
-=======
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-
-
->>>>>>> signals added
 # Create your models here.
 
 
@@ -16,8 +9,6 @@ class Curso(models.Model):
     precio = models.IntegerField(default=0)
     imagen_principal = models.ImageField(
         upload_to="adjuntos/", default=None, null=True, blank=True)
-<<<<<<< HEAD
-
     def __str__(self):
         return self.nombre
 
@@ -26,8 +17,6 @@ class ImagenCurso(models.Model):
     curso = models.ForeignKey("Curso", on_delete=models.CASCADE)
     archivo = models.FileField(upload_to="adjuntos/")
     nombre = models.CharField(max_length=50, default=None, null=True, blank=True)
-=======
->>>>>>> added signals dir & config
 
     def __str__(self):
         return self.nombre
@@ -59,11 +48,3 @@ class AdjuntosCurso(models.Model):
 
     def __str__(self) -> str:
         return self.nombre
-
-
-@receiver(post_save, sender=Contacto)
-def create_contact(sender, instance, created, **kwargs):
-    print("New contact and email was sent!")
-
-
-post_save.connect(create_contact, sender=Contacto)

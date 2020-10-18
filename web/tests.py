@@ -15,9 +15,6 @@ class HomeTest(TestCase):
     def test_contacto(self):
         instance = Contacto()
         self.assertEqual(type(instance.author), str)
-from django.test import TestCase
-from web.models import Contacto
-# Create your tests here.
 
 
 class ContactoModelTest(TestCase):

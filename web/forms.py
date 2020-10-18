@@ -1,4 +1,4 @@
-from django.db.models.fields import CharField
+from django.core.exceptions import ValidationError
 from .models import Curso, Pelicula, Contacto
 from django import forms
 from django.contrib.auth.models import User
