@@ -9,6 +9,8 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 # Create your views here.
 
+from django.contrib import messages
+
 
 def index(request):
     """
