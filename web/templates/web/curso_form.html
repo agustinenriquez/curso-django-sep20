@@ -4,22 +4,9 @@
 {% block content %}
       <div class="row">
         <div class="col-md-12">
-        <h2>Contacto</h2>
+        <h2>Editar curso</h2>
         {% if errors %}
             <h2>errors</h2>
-            <p>{{ errors }} </p>
-        {% endif %}
-        {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-            <li
-              {% if message.tags %} 
-              class="{{ message.tags }}"
-              {% endif %}>
-              {{ message }}
-              </li>
-            {% endfor %}
-        </ul>
         {% endif %}
         <form action="#" method="POST">
             {% csrf_token %}

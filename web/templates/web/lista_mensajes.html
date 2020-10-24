@@ -1,0 +1,18 @@
+{% extends 'web/base.html' %}
+{% load static %}
+
+{% include 'web/navbar.html' %}
+
+{% block content %}
+      <div class="row">
+        {% for mensaje in object_list %}
+        <div class="col-md-4">
+        <ul>
+            <li>{{mensaje.author}}</li>
+            <li>{{mensaje.mensaje}}</li>
+            <li>{{mensaje.email}}</li>
+            <li>{{mensaje.created_date}}</li>
+        </div>
+        {% endfor %}
+      </div>
+{% endblock %}

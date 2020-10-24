@@ -1,192 +1,82 @@
+from django.contrib.messages.api import success
 from django.shortcuts import render, reverse
 from django.http import HttpResponseRedirect
-from .models import Curso
+from .models import Curso, Contacto, Inscripcion
 from .forms import CursoForm, FormularioCursos, LoginForm, PeliculaForm, ContactoForm, UsuarioForm
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-# Create your views here.
+from django.contrib import messages
+import logging
+from django.views.generic.base import TemplateView
+from django.views.generic import FormView, ListView, DetailView
+from django.views.generic.edit import CreateView, UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-def index(request):
-    """
-        Homepage
-    """
-    cursos = Curso.objects.all()
-    return render(request, "web/index.html", {"cursos": cursos})
+class IndexView(TemplateView):
+    template_name = "web/index.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["saludo"] = "hola hola"
+        return context
 
 
-def detallecurso(request, *args, **kwargs):
-    """
-        Devuelve el detalle de un curso usando la pk definida en urls.py.
-    """
-    curso = Curso.objects.get(pk=kwargs['pk'])
-    formu = CursoForm()
-    return render(
-        request,
-        "web/detalle_curso.html",
-        {"curso": curso, "formu": formu})
+class ContactView(FormView):
+    form_class = ContactoForm
+    success_url = "/contacto/"
+    template_name = "web/contacto.html"
+
+    def form_valid(self, form):
+        Contacto.objects.create(
+            author=form.cleaned_data['author'],
+            mensaje=form.cleaned_data['mensaje'],
+            email=form.cleaned_data['email']
+        )
+        return HttpResponseRedirect(self.success_url)
 
 
-def inscripciones(request, *args, **kwargs):
-    if request.method == 'POST':
-        formu = FormularioCursos(request.POST)
-        if formu.is_valid():
-            formu.save()
-            return HttpResponseRedirect(reverse("index"))
-        else:
-            return render(
-                request,
-                "web/inscripciones.html",
-                {"form": formu, "error": formu.errors})
-    else:
-        formu = FormularioCursos()
-        return render(request, "web/inscripciones.html", {"form": formu})
+class ContactoListView(ListView):
+    model = Contacto
+    template_name = "web/lista_mensajes.html"
+    queryset = Contacto.objects.filter(created_date__isnull=False).order_by("-created_date")
 
 
-def contacto(request):
-    """
-        Renderiza la pagina de contacto con su formulario.
-    """
-    if request.method == "POST":
-        form = ContactoForm(request.POST)
-        if form.is_valid():
-            # send_mail(
-            #     "EducIT: Recibimos tu mensaje",
-            #     "Dentro de poco nos pondremos en contacto.",
-            #     "contacto@educit.com.ar",
-            #     [form.cleaned_data['email']],
-            #     fail_silently=False,
-            # )
-            form.save()
-            return HttpResponseRedirect(reverse("contacto"))
-        else:
-            context = {'error': "El formulario no es valido"}
-            return render(request, "web/contacto.html", context)
-    else:
-        form = ContactoForm()
-        return render(request, "web/contacto.html", {"form": form})
+
+class CursoListView(ListView):
+    model = Curso
 
 
-def agregar_peliculas(request):
-    """
-        Renderiza un formulario para agregar peliculas
-    """
-    if request.method == "POST":
-        form = PeliculaForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse("agregar_peliculas"))
-        else:
-            context = {'error': "El formulario no es valido"}
-            return render(request, "web/agregar_pelicula.html", context)
-    else:
-        form = PeliculaForm()
-        return render(request, "web/agregar_pelicula.html", {"form": form})
+class CursoDetailView(DetailView):
+    model = Curso
 
 
-def busqueda(request):
-    """
-        Devuelve resultados de busqueda hecho a traves del formulario.
-        Curso.objects.all() -> devuelve todos los resultados
-        Curso.objects.first() -> primero
-        Curso.objects.last() -> ultimo
-        Curso.objects.distinct() -> elimina duplicados
-        Curso.objects.all().delete() -> borra todo
-        Curso.objects.first().delete() -> borra uno
-        Curso.objects.all[0].delete()
-        Curso.objects.get(pk=1) -> devuelve obj con pk 1
-        Contacto.objects.filter(mensaje__contains="texto")
-        Curso.objects.get(pk=1).values("nombre") -> devuelve el campo seleccionado
-        Perfil.objects.filter(user__email__contains="@gmail.com")
+class InscripcionesCreateView(LoginRequiredMixin, CreateView):
+    model = Inscripcion
+    template_name = "web/inscripciones.html"
+    fields = ("nombre", "email", "curso")
+    success_url = "/"
 
-        *** Subfiltros ***
+    def get_success_url(self):
+        return f"{self.success_url}"
 
-        __contains __icontains __in __field __lte __gte __lt __gt
-        __exact __endswith __isnull 
+    def form_valid(self, form):
+        return super().form_valid(form)
 
-        ***            ***
-
-        Perfil.objects.all().exclude()
-
-        Q queries | F Expressions
-        prefetch_related | select_related
-
-    """
-    curso = Curso.objects.filter(nombre__icontains=request.GET['q'])
-    return render(request, "web/resultados_busqueda.html", {'cursos': curso})
+    def get_context_data(self, **kwargs):
+        if "form" not in kwargs:
+            form = self.get_form()
+            items = form.fields['curso'].choices.queryset.filter(pk=self.kwargs["pk"])
+            form.initial["curso"] = items.first()
+        return super().get_context_data(**kwargs)
 
 
-def logueo(request):
-    """
-        Renderiza la pagina para identificarse a la web.
-    """
-    error = None
-    if request.method == "POST":
-        username = request.POST["username"]
-        password = request.POST["password"]
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return HttpResponseRedirect(reverse(index))
-        else:
-            form = LoginForm()
-            error = "El usuario no existe"
-    else:
-        form = LoginForm()
-    return render(request, "web/login.html", {"form": form, "error": error})
+class UpdateCurso(UpdateView):
+    model = Curso
+    form_class = CursoForm
+    success_url = "/curso/"
 
-
-def deslogueo(request):
-    """
-        Desloguea al usuario y redirecciona a la home.
-    """
-    logout(request)
-    return HttpResponseRedirect(reverse("index"))
-
-
-@login_required(login_url="/login/")
-def crear_curso(request):
-    """
-        Renderiza el formulario de creacion de cursos.
-    """
-    error = None
-    if request.method == 'POST':
-        form = CursoForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse("crear-curso"))
-        else:
-            context = {'error': "El formulario no es valido"}
-            return render(request, "web/agregar_pelicula.html", context)
-    else:
-        form = CursoForm()
-    return render(request, "web/crear_curso.html", {"form": form, "error": error})
-
-
-def crear_usuario(request):
-    """
-        Renderiza formulario para crear un usuario.
-    """
-    template = "web/crear_usuario.html"
-    context = {}
-    if request.method == 'POST':
-        form = UsuarioForm(request.POST)
-        if form.is_valid():
-            obj, created = User.objects.get_or_create(
-                username=request.POST['username'],
-                password=request.POST['password'],
-                email=request.POST['email'])
-            if created:
-                return HttpResponseRedirect(reverse("index"))
-            else:
-                context['form'] = UsuarioForm()
-                context["ya_creado"] = True
-                return render(request, template, context)
-        else:
-            context['error'] = 'el usuario ya existe.'
-            return render(request, template, context)
-    else:
-        context['form'] = UsuarioForm()
-        return render(request, template, context)
+    def get_success_url(self):
+        return f"{self.success_url}{self.object.id}"

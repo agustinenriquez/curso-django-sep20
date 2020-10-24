@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.deletion import CASCADE
+from django.utils import timezone
 # Create your models here.
 
 
@@ -37,7 +39,20 @@ class Contacto(models.Model):
     author = models.CharField(max_length=50)
     mensaje = models.TextField(max_length=350)
     email = models.EmailField(max_length=254)
-    
+    created_date = models.DateTimeField(default=timezone.now)
+
     def __str__(self):
         return self.author
 
+
+class Inscripcion(models.Model):
+    nombre = models.CharField(max_length=50)
+    email = models.EmailField(max_length=254)
+    curso = models.ForeignKey("Curso", on_delete=models.CASCADE, null=True)
+    fecha_creacion = models.DateTimeField(default=timezone.now)
+
+    def save(self, *args, **kwargs):
+        return super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.author
